@@ -46,8 +46,11 @@ void draw() {
   } else {
     dropArrow(width / 2.0, height / 2.0 + sin(frameCount / 15.0) * 15);
     textAlign(CENTER, TOP);
-    text("Drop a ", width / 2.0, height / 2.0 + 30);
+    text("Drop a folder or texture\nto convert it!", width / 2.0, height / 2.0 + 30);
   }
+  textAlign(RIGHT,TOP);
+  setTextSize(13);
+  text("Credits\nVTFCmd: Neil Jedrzejewski & Ryan Gregg\nVTEX / VPK: Valve Corporation", width, 0);
 }
 
 void setTextSize(int sz) {
