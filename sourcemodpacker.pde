@@ -102,6 +102,7 @@ void dropEvent(DropEvent theDropEvent) {
           fileCopy(f.toString(), newPath(f.toString()));
         }
       }
+      console.add("INFO: Processed " + amt + " files!");
       if (new File(dropped + "\\new").exists()) {
         File vpk = new File(dropped + "\\new.vpk");
         File finalVPK = new File(dropped + "\\pak01_dir.vpk");
