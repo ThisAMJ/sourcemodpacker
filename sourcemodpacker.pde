@@ -173,10 +173,11 @@ void fileMove(String from, String to) {
 }
 
 boolean isImg(String p) {
-  return (p.endsWith(".jpg") ||
-    p.endsWith(".txt") ||
+  return (p.endsWith(".bmp") ||
+    p.endsWith(".jpg") ||
     p.endsWith(".png") ||
-    p.endsWith(".tga"));
+    p.endsWith(".tga") ||
+    p.endsWith(".txt"));
 }
 
 void run(String[] args) {
