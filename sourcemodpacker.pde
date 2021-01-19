@@ -50,6 +50,7 @@ void draw() {
   }
   textAlign(RIGHT,TOP);
   setTextSize(13);
+  fill(255);
   text("Credits\nVTFCmd: Neil Jedrzejewski & Ryan Gregg\nVTEX / VPK: Valve Corporation", width, 0);
 }
 
