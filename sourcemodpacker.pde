@@ -32,9 +32,7 @@ void draw() {
   stroke(255);
   textAlign(LEFT, TOP);
   setTextSize(10);
-  for (int i = 0; i < console.size(); i++) {
-    text(console.get(i), 0, i * textSize);
-  }
+  text(join(alta(console), '\n'), 0, 0);
   setTextSize(30);
   if (processing) {
     rectMode(CENTER);
@@ -52,6 +50,14 @@ void draw() {
   setTextSize(13);
   fill(255);
   text("Credits\nVTFCmd: Neil Jedrzejewski & Ryan Gregg\nVTEX / VPK: Valve Corporation", width, 0);
+}
+
+String[] alta(ArrayList<String> al) {
+  String[] array = new String[al.size()];
+  for (int i = 0; i < al.size(); i++) {
+    array[i] = al.get(i);
+  }
+  return array;
 }
 
 void setTextSize(int sz) {
