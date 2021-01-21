@@ -40,7 +40,7 @@ void draw() {
     rect(width/2, height - 30, width - 2 * 25, 25);
     fill(0, 255, 0);
     rectMode(CORNER);
-    rect(5, height - 42.5, (progress / float(amt)) * (width - 2 * 25), 25);
+    rect(5, height - 42.5, (progress / float(amt)) * (width - 50), 25);
   } else {
     dropArrow(width / 2.0, height / 2.0 + sin(frameCount / 15.0) * 15);
     textAlign(CENTER, TOP);
