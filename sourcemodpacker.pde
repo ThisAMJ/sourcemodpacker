@@ -37,7 +37,7 @@ void draw() {
   if (processing) {
     rectMode(CENTER);
     fill(255);
-    rect(width/2, height - 30, width - 2 * 25, 25);
+    rect(width/2, height - 30, width - 50, 25);
     fill(0, 255, 0);
     rectMode(CORNER);
     rect(5, height - 42.5, (progress / float(amt)) * (width - 50), 25);
