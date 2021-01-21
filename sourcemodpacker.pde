@@ -4,12 +4,12 @@ import java.nio.file.*;
 boolean processing;
 int progress;
 int amt;
-float textSize;
 float consoleVis;
 
 String dropped;
 ArrayList<String> console;
 SDrop drop;
+
 void setup() {
   size(1280, 720);
   surface.setTitle("Source Mod Packer");
@@ -31,9 +31,9 @@ void draw() {
   fill(255);
   stroke(255);
   textAlign(LEFT, TOP);
-  setTextSize(10);
+  textSize(10);
   text(join(alta(console), '\n'), 0, 0);
-  setTextSize(30);
+  textSize(30);
   if (processing) {
     rectMode(CENTER);
     fill(255);
@@ -46,8 +46,8 @@ void draw() {
     textAlign(CENTER, TOP);
     text("Drop a folder or texture\nto convert it!", width / 2.0, height / 2.0 + 30);
   }
-  textAlign(RIGHT,TOP);
-  setTextSize(13);
+  textAlign(RIGHT, TOP);
+  textSize(13);
   fill(255);
   text("Credits\nVTFCmd: Neil Jedrzejewski & Ryan Gregg\nVTEX / VPK: Valve Corporation", width, 0);
 }
@@ -58,11 +58,6 @@ String[] alta(ArrayList<String> al) {
     array[i] = al.get(i);
   }
   return array;
-}
-
-void setTextSize(int sz) {
-  textSize = sz;
-  textSize(sz);
 }
 
 void dropArrow(float x, float y) {
@@ -76,11 +71,13 @@ void vtfify(String path) {
     File f = new File(path);
     if (f.exists()) {
       String out = newPath(path.substring(0, path.lastIndexOf('\\')));
-      new File(out).mkdirs();
+      new File(out).mkdirs(); // vtex/vtfcmd don't create requisite directories
       if (f.toString().endsWith(".txt")) {
+        // use vtex to convert animated textures
         run(new String[]{dataPath("vtex"), "-quiet", "-game", dataPath(""), "-outdir", out, path});
         new File(newPath(path).replace(".txt", ".pwl.vtf")).delete(); //vtex creates .pwl.vtf files, we dont want those
       } else {
+        // use vtfcmd to convert regular textures
         run(new String[]{dataPath("vtfcmd"), "-silent", "-file", path, "-output", out});
       }
     }
