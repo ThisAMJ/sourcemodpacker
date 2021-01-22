@@ -20,55 +20,57 @@ void vtfify(String path) {
 }
 
 void dropEvent(DropEvent theDropEvent) {
-  processing = true;
-  console = new ArrayList<String>();
-  dropped = theDropEvent.toString();
-  if (theDropEvent.isFile()) {
-    if (theDropEvent.file().isDirectory()) {
-      ArrayList<File> files;
-      if (new File(dropped + "\\modifications").exists()) {
-        files = listFilesRecursive(dropped + "\\modifications", false, true);
-      } else {
-        files = listFilesRecursive(dropped, false, true);
-      }
-      amt = files.size();
-      progress = 0;
-      for (File f : files) {
-        progress++;
-        if (isImg(f.toString())) {
-          vtfify(f.toString());
+  if (!settings) {
+    processing = true;
+    console = new ArrayList<String>();
+    dropped = theDropEvent.toString();
+    if (theDropEvent.isFile()) {
+      if (theDropEvent.file().isDirectory()) {
+        ArrayList<File> files;
+        if (new File(dropped + "\\modifications").exists()) {
+          files = listFilesRecursive(dropped + "\\modifications", false, true);
         } else {
-          fileCopy(f.toString(), newPath(f.toString()));
+          files = listFilesRecursive(dropped, false, true);
         }
-      }
-      console.add("INFO: Processed " + amt + " files!");
-      if (new File(dropped + "\\new").exists()) {
-        File vpk = new File(dropped + "\\new.vpk");
-        File finalVPK = new File(dropped + "\\pak01_dir.vpk");
-        if (vpk.exists() || finalVPK.exists()) {
-          console.add("WARN: VPK already exists, overwriting");
+        amt = files.size();
+        progress = 0;
+        for (File f : files) {
+          progress++;
+          if (isImg(f.toString())) {
+            vtfify(f.toString());
+          } else {
+            fileCopy(f.toString(), newPath(f.toString()));
+          }
+        }
+        console.add("INFO: Processed " + amt + " files!");
+        if (new File(dropped + "\\new").exists()) {
+          File vpk = new File(dropped + "\\new.vpk");
+          File finalVPK = new File(dropped + "\\pak01_dir.vpk");
+          if (vpk.exists() || finalVPK.exists()) {
+            console.add("WARN: VPK already exists, overwriting");
+            if (vpk.exists()) {
+              vpk.delete();
+            }
+            if (finalVPK.exists()) {
+              finalVPK.delete();
+            }
+          }
+          run(new String[]{dataPath("vpk"), dropped + "\\new"});
           if (vpk.exists()) {
-            vpk.delete();
-          }
-          if (finalVPK.exists()) {
-            finalVPK.delete();
+            vpk.renameTo(finalVPK);
           }
         }
-        run(new String[]{dataPath("vpk"), dropped + "\\new"});
-        if (vpk.exists()) {
-          vpk.renameTo(finalVPK);
+      } else if (isImg(dropped)) {
+        File anim = new File(dropped.substring(0, dropped.length() - 7) + ".txt");
+        if (anim.exists()) {
+          vtfify(anim.toString());
+        } else {
+          vtfify(dropped);
         }
-      }
-    } else if (isImg(dropped)) {
-      File anim = new File(dropped.substring(0, dropped.length() - 7) + ".txt");
-      if (anim.exists()) {
-        vtfify(anim.toString());
-      } else {
-        vtfify(dropped);
       }
     }
+    processing = false;
   }
-  processing = false;
 }
 
 boolean isImg(String p) {

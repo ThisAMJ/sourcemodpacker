@@ -1,6 +1,7 @@
 import drop.*;
 import java.nio.file.*;
 
+boolean settings;
 boolean processing;
 int progress;
 int amt;
@@ -22,34 +23,6 @@ void setup() {
   drop = new SDrop(this);
 }
 
-void draw() {
-  background(0);
-  while (console.size() >= 25) {
-    console.remove(0);
-  }
-  fill(255);
-  stroke(255);
-  textAlign(LEFT, TOP);
-  textSize(10);
-  text(join(alta(console), '\n'), 0, 0);
-  textSize(30);
-  if (processing) {
-    rectMode(CENTER);
-    fill(255);
-    rect(width / 2, height - 30, width - 50, 25);
-    fill(0, 255, 0);
-    rectMode(CORNER);
-    rect(5, height - 42.5, (progress / float(amt)) * (width - 50), 25);
-  } else {
-    dropArrow(width / 2.0, height / 2.0 + sin(frameCount / 15.0) * 15);
-    textAlign(CENTER, TOP);
-    text("Drop a folder or texture\nto convert it!", width / 2.0, height / 2.0 + 30);
-  }
-  textAlign(RIGHT, TOP);
-  textSize(13);
-  fill(255);
-  text("Credits\nVTFCmd: Neil Jedrzejewski & Ryan Gregg\nVTEX / VPK: Valve Corporation", width, 0);
-}
 
 String[] alta(ArrayList<String> al) {
   String[] array = new String[al.size()];
