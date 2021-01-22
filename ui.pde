@@ -3,12 +3,19 @@ void draw() {
   while (console.size() >= 25) {
     console.remove(0);
   }
+  fill(255);
+  textAlign(LEFT, TOP);
   if (settings) {
-    
+    textSize(50);
+    text("Settings", 0, 0);
+      fill(150);
+      rectMode(CORNER);
+      rect(width - 130, height - 55, 125, 50);
+      fill(255);
+      textAlign(CENTER, CENTER);
+      textSize(30);
+      text("Back", width - 65, height - 30);
   } else {
-    fill(255);
-    stroke(255);
-    textAlign(LEFT, TOP);
     textSize(10);
     text(join(alta(console), '\n'), 0, 0);
     textSize(30);
@@ -23,6 +30,13 @@ void draw() {
       dropArrow(width / 2.0, height / 2.0 + sin(frameCount / 15.0) * 15);
       textAlign(CENTER, TOP);
       text("Drop a folder or texture\nto convert it!", width / 2.0, height / 2.0 + 30);
+      fill(150);
+      rectMode(CORNER);
+      rect(width - 130, height - 55, 125, 50);
+      fill(255);
+      textAlign(CENTER, CENTER);
+      textSize(30);
+      text("Settings", width - 65, height - 30);
     }
     textAlign(RIGHT, TOP);
     textSize(13);
@@ -32,7 +46,9 @@ void draw() {
 }
 
 void mousePressed() {
-  println(mouseRegion(0, 0, width/2, height/2));
+  if (mouseRegion(width - 130, height - 55, width - 5, height - 5)) {
+    settings = !settings;
+  }
 }
 
 boolean mouseRegion(float x1, float y1, float x2, float y2) {
