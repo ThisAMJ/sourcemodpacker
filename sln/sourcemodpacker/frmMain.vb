@@ -3,7 +3,7 @@
 Public Class FrmMain
     Private Sub FrmMain_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         AllowDrop = True
-        'Process.Start("C:\Users\User\Files\Games\Game Files\Run Steam Games\main\run.bat", "320")
+        'Process.Start("C:\path\to\program.exe", "arg", "arg", "arg", "etc")
     End Sub
 
     Public Sub FileEnter(sender As Object, e As DragEventArgs) Handles Me.DragEnter
@@ -11,15 +11,20 @@ Public Class FrmMain
     End Sub
 
     Public Sub FileDrop(sender As Object, e As DragEventArgs) Handles Me.DragDrop
-        Dim dropped As String() = e.Data.GetData(DataFormats.FileDrop)
-        Dim files = dropped.ToList()
-        For Each drop In dropped
-            If Directory.Exists(drop) Then
-                Console.WriteLine(drop)
-                files.Remove(drop)
-                files.AddRange(Directory.GetFiles(drop, "*", SearchOption.AllDirectories))
-            End If
-        Next
+        Dim files = GetFiles(CType(e.Data.GetData(DataFormats.FileDrop), String()).First)
         Console.WriteLine(files.Count & " files")
+        Pack(files)
     End Sub
 End Class
+
+Module code
+    Public Function GetFiles(path As String)
+        Dim files = New List(Of String)
+        If (File.Exists(path)) Then
+            files.Add(path)
+        ElseIf (Directory.Exists(path)) Then
+            files.AddRange(Directory.GetFiles(path, "*", SearchOption.AllDirectories))
+        End If
+        Return files
+    End Function
+End Module
