@@ -11,9 +11,15 @@ Public Class FrmMain
     End Sub
 
     Public Sub FileDrop(sender As Object, e As DragEventArgs) Handles Me.DragDrop
-        Dim files As String() = e.Data.GetData(DataFormats.FileDrop)
-        For Each file In files
-            Console.WriteLine(file)
+        Dim dropped As String() = e.Data.GetData(DataFormats.FileDrop)
+        Dim files = dropped.ToList()
+        For Each drop In dropped
+            If Directory.Exists(drop) Then
+                Console.WriteLine(drop)
+                files.Remove(drop)
+                files.AddRange(Directory.GetFiles(drop, "*", SearchOption.AllDirectories))
+            End If
         Next
+        Console.WriteLine(files.Count & " files")
     End Sub
 End Class
