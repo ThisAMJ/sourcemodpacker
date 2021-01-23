@@ -1,0 +1,12 @@
+C:\Users\User\source\repos\sourcemodpacker\sourcemodpacker\obj\Debug\sourcemodpacker.vbprojAssemblyReference.cache
+C:\Users\User\source\repos\sourcemodpacker\sourcemodpacker\obj\Debug\sourcemodpacker.frmMain.resources
+C:\Users\User\source\repos\sourcemodpacker\sourcemodpacker\obj\Debug\sourcemodpacker.Resources.resources
+C:\Users\User\source\repos\sourcemodpacker\sourcemodpacker\obj\Debug\sourcemodpacker.vbproj.GenerateResource.cache
+C:\Users\User\source\repos\sourcemodpacker\sourcemodpacker\obj\Debug\sourcemodpacker.vbproj.CoreCompileInputs.cache
+C:\Users\User\source\repos\sourcemodpacker\sourcemodpacker\obj\Debug\sourcemodpacker.xml
+C:\Users\User\source\repos\sourcemodpacker\sourcemodpacker\obj\Debug\sourcemodpacker.pdb
+C:\Users\User\source\repos\sourcemodpacker\sourcemodpacker\bin\Debug\sourcemodpacker.exe.config
+C:\Users\User\source\repos\sourcemodpacker\sourcemodpacker\bin\Debug\sourcemodpacker.exe
+C:\Users\User\source\repos\sourcemodpacker\sourcemodpacker\bin\Debug\sourcemodpacker.pdb
+C:\Users\User\source\repos\sourcemodpacker\sourcemodpacker\bin\Debug\sourcemodpacker.xml
+C:\Users\User\source\repos\sourcemodpacker\sourcemodpacker\obj\Debug\sourcemodpacker.exe
