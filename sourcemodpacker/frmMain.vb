@@ -8,6 +8,7 @@ Public Class FrmMain
 
     Public Sub FileEnter(sender As Object, e As DragEventArgs) Handles Me.DragEnter
         If e.Data.GetDataPresent(DataFormats.FileDrop) Then e.Effect = DragDropEffects.Copy
+        lblFolder.Text = CType(e.Data.GetData(DataFormats.FileDrop), String()).First
     End Sub
 
     Public Sub FileDrop(sender As Object, e As DragEventArgs) Handles Me.DragDrop
@@ -15,9 +16,15 @@ Public Class FrmMain
         Dim files = GetFiles(dropPath)
         Pack(files)
     End Sub
+
+    Public Sub DropCancel() Handles Me.DragLeave
+        lblFolder.Text = "Drop a folder here!"
+    End Sub
 End Class
 
 Module code
+    Public options As New Settings(0)
+
     Public dropPath As String
 
     Public Function GetFiles(path As String)

@@ -9,50 +9,66 @@ Module Converter
             VTFify(file)
             FrmMain.pbConversion.Value += 1
         Next
+        FrmMain.pbConversion.Value = 0
     End Sub
 
 
 
     Public Sub VTFify(path As String)
         Dim outdir = path.Substring(0, path.LastIndexOf("\"))
+        If (outdir.Replace(dropPath, "").Contains("ignore")) Then
+            Return
+        End If
+        Dim nextDir = outdir.Replace(dropPath, "").Substring(0, outdir.Replace(dropPath & "\", "").IndexOf("\") + 1)
+        If (options.fileMode = 0) Then
+            outdir = outdir.Replace(dropPath & nextDir, dropPath & "\-new")
+        Else
+            outdir = outdir.Replace(dropPath, dropPath & "\-new")
+        End If
+        Directory.CreateDirectory(outdir)
+
         Select Case (path.Substring(path.LastIndexOf(".")))
             Case ".txt"
+
                 'Animated textures are formatted like foobar000.tga foobar001.tga
                 'And referenced using a text file like foobar.txt containing
                 'startindex and endindex (eg 0 and 1)
+                'see example.
 
                 'we check if this is for an animated texture
                 If (ImageExists(path.Substring(0, path.LastIndexOf(".")) & "000")) Then
                     'it is for an animated texture, convert it to vtf using vtex
 
-                    'todo: vtex can only handle targa, convert other formats using ffmpeg
+                    '--> todo: vtex can only handle targa, convert other formats using ffmpeg
 
                     Dim psi = New ProcessStartInfo With {
                         .FileName = CurDir() & "\vtex",
                         .WindowStyle = ProcessWindowStyle.Hidden,
                         .Arguments = "-quiet -game " & Escape(CurDir()) & " -outdir " & Escape(outdir) & " " & Escape(path)
-                    }
+                    } 'vtex
                     Process.Start(psi)
                 Else
                     'it's some other txt
                 End If
             Case ".bmp", ".jpg", ".png", ".tga"
+
                 'It's a texture to be converted to vtf
 
                 'we check if it is part of an animated texture by checking if a txt named the same as texture without ### exists
                 If (File.Exists(path.Substring(0, path.Length - 7) & ".txt")) Then
-                    'it is part of an animated texture
-                    'don't do anything
+                    'it is part of an animated texture, don't do anything
                 Else
-                    'it is not part of an animated texture
-                    'convert it to vtf using vtfcmd
+                    'it is not part of an animated texture, we're good to convert
                     Dim psi = New ProcessStartInfo With {
                         .FileName = CurDir() & "\vtfcmd",
                         .WindowStyle = ProcessWindowStyle.Hidden,
                         .Arguments = "-silent -file " & Escape(path) & " -output " & Escape(outdir)
-                    }
+                    } 'vtfcmd
                     Process.Start(psi)
                 End If
+            Case Else
+                'it's some other file
+                File.Copy(path, outdir & path.Substring(path.LastIndexOf("\")))
         End Select
     End Sub
 
@@ -70,7 +86,9 @@ End Module
 
 
 Class Settings
-    Dim animated
-    Public Sub New()
+    Public fileMode As Integer
+
+    Public Sub New(fileMode As Integer)
+        Me.fileMode = fileMode
     End Sub
 End Class
