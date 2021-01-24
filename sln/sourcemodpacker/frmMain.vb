@@ -7,7 +7,7 @@ Public Class FrmMain
     End Sub
 
     Public Sub FileEnter(sender As Object, e As DragEventArgs) Handles Me.DragEnter
-        If (e.Data.GetDataPresent(DataFormats.FileDrop)) Then e.Effect = DragDropEffects.Copy
+        If e.Data.GetDataPresent(DataFormats.FileDrop) Then e.Effect = DragDropEffects.Copy
     End Sub
 
     Public Sub FileDrop(sender As Object, e As DragEventArgs) Handles Me.DragDrop
