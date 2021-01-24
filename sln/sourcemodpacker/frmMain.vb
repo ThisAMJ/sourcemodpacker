@@ -20,9 +20,9 @@ End Class
 Module code
     Public Function GetFiles(path As String)
         Dim files = New List(Of String)
-        If (File.Exists(path)) Then
+        If File.Exists(path) Then
             files.Add(path)
-        ElseIf (Directory.Exists(path)) Then
+        ElseIf Directory.Exists(path) Then
             files.AddRange(Directory.GetFiles(path, "*", SearchOption.AllDirectories))
         End If
         Return files
