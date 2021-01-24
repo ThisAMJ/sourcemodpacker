@@ -22,19 +22,29 @@ Partial Class FrmMain
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
+        Me.pbConversion = New System.Windows.Forms.ProgressBar()
         Me.SuspendLayout()
         '
-        'frmMain
+        'pbConversion
+        '
+        Me.pbConversion.Location = New System.Drawing.Point(13, 415)
+        Me.pbConversion.Name = "pbConversion"
+        Me.pbConversion.Size = New System.Drawing.Size(263, 23)
+        Me.pbConversion.TabIndex = 0
+        '
+        'FrmMain
         '
         Me.AllowDrop = True
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.Black
         Me.ClientSize = New System.Drawing.Size(800, 450)
-        Me.Name = "frmMain"
+        Me.Controls.Add(Me.pbConversion)
+        Me.Name = "FrmMain"
         Me.Text = "Source Mod Packer"
         Me.ResumeLayout(False)
 
     End Sub
 
+    Friend WithEvents pbConversion As ProgressBar
 End Class
