@@ -14,7 +14,7 @@ Module Converter
 
 
     Public Sub VTFify(path As String)
-        Console.WriteLine(path.Substring(path.LastIndexOf(".")))
+        Dim outdir = path.Substring(0, path.LastIndexOf("\"))
         Select Case (path.Substring(path.LastIndexOf(".")))
             Case ".txt"
                 'Animated textures are formatted like foobar000.tga foobar001.tga
@@ -23,24 +23,35 @@ Module Converter
 
                 'we check if this is for an animated texture
                 If (ImageExists(path.Substring(0, path.LastIndexOf(".")) & "000")) Then
-                    'it is for an animated texture
-                    'convert it to vtf using vtex
+                    'it is for an animated texture, convert it to vtf using vtex
 
-                    'todo: vtex can only handle tga, convert other formats using ffmpeg
+                    'todo: vtex can only handle targa, convert other formats using ffmpeg
 
-                    'Process.Start(FileSystem.CurDir() & "/vtex")
+                    Dim psi = New ProcessStartInfo With {
+                        .FileName = CurDir() & "\vtex",
+                        .WindowStyle = ProcessWindowStyle.Hidden,
+                        .Arguments = "-quiet -game " & Escape(CurDir()) & " -outdir " & Escape(outdir) & " " & Escape(path)
+                    }
+                    Process.Start(psi)
                 Else
                     'it's some other txt
                 End If
             Case ".bmp", ".jpg", ".png", ".tga"
                 'It's a texture to be converted to vtf
 
-                'we check if it is part of an animated texture
+                'we check if it is part of an animated texture by checking if a txt named the same as texture without ### exists
                 If (File.Exists(path.Substring(0, path.Length - 7) & ".txt")) Then
                     'it is part of an animated texture
                     'don't do anything
                 Else
-
+                    'it is not part of an animated texture
+                    'convert it to vtf using vtfcmd
+                    Dim psi = New ProcessStartInfo With {
+                        .FileName = CurDir() & "\vtfcmd",
+                        .WindowStyle = ProcessWindowStyle.Hidden,
+                        .Arguments = "-silent -file " & Escape(path) & " -output " & Escape(outdir)
+                    }
+                    Process.Start(psi)
                 End If
         End Select
     End Sub
@@ -50,6 +61,10 @@ Module Converter
                File.Exists(path & ".jpg") Or
                File.Exists(path & ".png") Or
                File.Exists(path & ".tga")
+    End Function
+
+    Public Function Escape(path As String)
+        Return """" & path & """"
     End Function
 End Module
 

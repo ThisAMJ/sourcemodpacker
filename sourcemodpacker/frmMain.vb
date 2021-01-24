@@ -4,14 +4,6 @@ Public Class FrmMain
     Private Sub FrmMain_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         AllowDrop = True
         'Process.Start("C:\path\to\program.exe", "arg", "arg", "arg", "etc")
-        Console.WriteLine(FileSystem.CurDir())
-        Process.Start(FileSystem.CurDir() & "\vpk.exe", "C:\Users\User\Files\Games\Game Files\Portal\Resources\Texture Mods\My Custom\new")
-    End Sub
-
-    Public Sub clic() Handles Me.Click
-
-        Dim pro = Process.Start("notepad.exe")
-        Threading.Thread.Sleep(100)
     End Sub
 
     Public Sub FileEnter(sender As Object, e As DragEventArgs) Handles Me.DragEnter
@@ -19,13 +11,15 @@ Public Class FrmMain
     End Sub
 
     Public Sub FileDrop(sender As Object, e As DragEventArgs) Handles Me.DragDrop
-        Dim files = GetFiles(CType(e.Data.GetData(DataFormats.FileDrop), String()).First)
-        Console.WriteLine(files.Count & " files")
+        dropPath = CType(e.Data.GetData(DataFormats.FileDrop), String()).First
+        Dim files = GetFiles(dropPath)
         Pack(files)
     End Sub
 End Class
 
 Module code
+    Public dropPath As String
+
     Public Function GetFiles(path As String)
         Dim files = New List(Of String)
         If File.Exists(path) Then
