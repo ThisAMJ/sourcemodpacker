@@ -5,11 +5,27 @@ Module Converter
         FrmMain.pbConversion.Minimum = 0
         FrmMain.pbConversion.Maximum = files.Count
         FrmMain.pbConversion.Value = 0
+        Directory.CreateDirectory(dropPath & "\-new")
         For Each file In files
             VTFify(file)
             FrmMain.pbConversion.Value += 1
         Next
         FrmMain.pbConversion.Value = 0
+        If (options.pack) Then
+            Dim psi = New ProcessStartInfo With {
+                .FileName = CurDir() & "\vpk",
+                .WindowStyle = ProcessWindowStyle.Hidden,
+                .Arguments = Escape(dropPath & "\-new")
+            }
+            Dim pro = Process.Start(psi)
+            pro.WaitForExit()
+            IO.Directory.Delete(dropPath & "\-new", True)
+            Try
+                File.Move(dropPath & "\-new.vpk", dropPath & "\pak01_dir.vpk")
+            Catch e As Exception
+            End Try
+
+        End If
     End Sub
 
 
@@ -19,12 +35,8 @@ Module Converter
         If (outdir.Replace(dropPath, "").Contains("ignore")) Then
             Return
         End If
-        Dim nextDir = outdir.Replace(dropPath, "").Substring(0, outdir.Replace(dropPath & "\", "").IndexOf("\") + 1)
-        If (options.fileMode = 0) Then
-            outdir = outdir.Replace(dropPath & nextDir, dropPath & "\-new")
-        Else
-            outdir = outdir.Replace(dropPath, dropPath & "\-new")
-        End If
+        outdir = outdire(path)
+
         Directory.CreateDirectory(outdir)
 
         Select Case (path.Substring(path.LastIndexOf(".")))
@@ -39,17 +51,38 @@ Module Converter
                 If (ImageExists(path.Substring(0, path.LastIndexOf(".")) & "000")) Then
                     'it is for an animated texture, convert it to vtf using vtex
 
-                    '--> todo: vtex can only handle targa, convert other formats using ffmpeg
+                    Dim convert As Boolean = Not (File.Exists(path.Substring(0, path.LastIndexOf(".")) & "000.tga"))
+                    If convert Then
+                        'vtex can only handle targa, we convert other formats using ffmpeg
+                        For Each f In Directory.GetFiles(path.Substring(0, path.LastIndexOf("\")), path.Substring(0, path.LastIndexOf(".")).Substring(path.LastIndexOf("\") + 1) & "*", SearchOption.TopDirectoryOnly)
+                            Dim si = New ProcessStartInfo With {
+                            .FileName = CurDir() & "\ffmpeg",
+                            .WindowStyle = ProcessWindowStyle.Hidden,
+                            .Arguments = "-i " & Escape(f) & " " & Escape(f.Substring(0, f.LastIndexOf(".")) & ".tga")
+                        }
+                            Dim ro = Process.Start(si)
+                            ro.WaitForExit()
+                        Next
+                    End If
 
                     Dim psi = New ProcessStartInfo With {
                         .FileName = CurDir() & "\vtex",
                         .WindowStyle = ProcessWindowStyle.Hidden,
                         .Arguments = "-quiet -game " & Escape(CurDir()) & " -outdir " & Escape(outdir) & " " & Escape(path)
                     } 'vtex
-                    Process.Start(psi)
+                    Dim pro = Process.Start(psi)
+                    pro.WaitForExit()
+
+                    If convert Then
+                        'delete converted tgas
+                        For Each f In Directory.GetFiles(path.Substring(0, path.LastIndexOf("\")), path.Substring(0, path.LastIndexOf(".")).Substring(path.LastIndexOf("\") + 1) & "*.tga", SearchOption.TopDirectoryOnly)
+                            File.Delete(f)
+                        Next
+                    End If
+
                 Else
-                    'it's some other txt
-                End If
+                        'it's some other txt
+                    End If
             Case ".bmp", ".jpg", ".png", ".tga"
 
                 'It's a texture to be converted to vtf
@@ -64,13 +97,31 @@ Module Converter
                         .WindowStyle = ProcessWindowStyle.Hidden,
                         .Arguments = "-silent -file " & Escape(path) & " -output " & Escape(outdir)
                     } 'vtfcmd
-                    Process.Start(psi)
+                    Dim pro = Process.Start(psi)
+                    pro.WaitForExit()
                 End If
             Case Else
                 'it's some other file
-                File.Copy(path, outdir & path.Substring(path.LastIndexOf("\")))
+                Try
+                    File.Copy(path, outdir & path.Substring(path.LastIndexOf("\")))
+                Catch e As Exception
+
+                End Try
         End Select
     End Sub
+    Public Function outdire(path As String)
+        Dim outdir = path.Substring(0, path.LastIndexOf("\"))
+        If outdir.Equals(dropPath) Then
+        Else
+            Dim nextDir = outdir.Replace(dropPath, "").Substring(0, outdir.Replace(dropPath & "\", "").IndexOf("\") + 1)
+            If (options.fileMode = 0) Then
+                outdir = outdir.Replace(dropPath & nextDir, dropPath & "\-new")
+            Else
+                outdir = outdir.Replace(dropPath, dropPath & "\-new")
+            End If
+        End If
+        Return outdir
+    End Function
 
     Public Function ImageExists(path As String)
         Return File.Exists(path & ".bmp") Or
@@ -87,8 +138,10 @@ End Module
 
 Class Settings
     Public fileMode As Integer
+    Public pack As Boolean
 
-    Public Sub New(fileMode As Integer)
+    Public Sub New(fileMode As Integer, pack As Boolean)
         Me.fileMode = fileMode
+        Me.pack = pack
     End Sub
 End Class

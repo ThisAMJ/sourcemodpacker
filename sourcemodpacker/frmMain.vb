@@ -14,6 +14,7 @@ Public Class FrmMain
     Public Sub FileDrop(sender As Object, e As DragEventArgs) Handles Me.DragDrop
         dropPath = CType(e.Data.GetData(DataFormats.FileDrop), String()).First
         Dim files = GetFiles(dropPath)
+        e.Effect = DragDropEffects.None
         Pack(files)
     End Sub
 
@@ -23,7 +24,7 @@ Public Class FrmMain
 End Class
 
 Module code
-    Public options As New Settings(0)
+    Public options As New Settings(0, True)
 
     Public dropPath As String
 
