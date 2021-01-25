@@ -7,11 +7,13 @@ Module Converter
         FrmMain.pbConversion.Value = 0
         Directory.CreateDirectory(dropPath & "\-new")
         For Each file In files
-            VTFify(file)
             FrmMain.pbConversion.Value += 1
+            VTFify(file)
         Next
         FrmMain.pbConversion.Value = 0
         If (options.pack) Then
+            File.Delete(dropPath & "\-new.vpk")
+            File.Delete(dropPath & "\pak01_dir.vpk")
             Dim psi = New ProcessStartInfo With {
                 .FileName = CurDir() & "\vpk",
                 .WindowStyle = ProcessWindowStyle.Hidden,
@@ -20,11 +22,7 @@ Module Converter
             Dim pro = Process.Start(psi)
             pro.WaitForExit()
             IO.Directory.Delete(dropPath & "\-new", True)
-            Try
-                File.Move(dropPath & "\-new.vpk", dropPath & "\pak01_dir.vpk")
-            Catch e As Exception
-            End Try
-
+            File.Move(dropPath & "\-new.vpk", dropPath & "\pak01_dir.vpk")
         End If
     End Sub
 
