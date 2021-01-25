@@ -54,10 +54,10 @@ Module Converter
                         'vtex can only handle targa, we convert other formats using ffmpeg
                         For Each f In Directory.GetFiles(path.Substring(0, path.LastIndexOf("\")), path.Substring(0, path.LastIndexOf(".")).Substring(path.LastIndexOf("\") + 1) & "*", SearchOption.TopDirectoryOnly)
                             Dim si = New ProcessStartInfo With {
-                            .FileName = CurDir() & "\ffmpeg",
-                            .WindowStyle = ProcessWindowStyle.Hidden,
-                            .Arguments = "-i " & Escape(f) & " " & Escape(f.Substring(0, f.LastIndexOf(".")) & ".tga")
-                        }
+                                .FileName = CurDir() & "\ffmpeg",
+                                .WindowStyle = ProcessWindowStyle.Hidden,
+                                .Arguments = "-i " & Escape(f) & " " & Escape(f.Substring(0, f.LastIndexOf(".")) & ".tga")
+                            }
                             Dim ro = Process.Start(si)
                             ro.WaitForExit()
                         Next
