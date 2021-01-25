@@ -49,7 +49,7 @@ Module Converter
                 If (ImageExists(path.Substring(0, path.LastIndexOf(".")) & "000")) Then
                     'it is for an animated texture, convert it to vtf using vtex
 
-                    Dim convert As Boolean = Not (File.Exists(path.Substring(0, path.LastIndexOf(".")) & "000.tga"))
+                    Dim convert = Not (File.Exists(path.Substring(0, path.LastIndexOf(".")) & "000.tga"))
                     If convert Then
                         'vtex can only handle targa, we convert other formats using ffmpeg
                         For Each f In Directory.GetFiles(path.Substring(0, path.LastIndexOf("\")), path.Substring(0, path.LastIndexOf(".")).Substring(path.LastIndexOf("\") + 1) & "*", SearchOption.TopDirectoryOnly)
