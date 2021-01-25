@@ -5,6 +5,7 @@ Module Converter
         FrmMain.pbConversion.Minimum = 0
         FrmMain.pbConversion.Maximum = files.Count
         FrmMain.pbConversion.Value = 0
+        Directory.Delete(dropPath & "\-new", True)
         Directory.CreateDirectory(dropPath & "\-new")
         For Each file In files
             FrmMain.pbConversion.Value += 1
@@ -21,7 +22,7 @@ Module Converter
             }
             Dim pro = Process.Start(psi)
             pro.WaitForExit()
-            IO.Directory.Delete(dropPath & "\-new", True)
+            Directory.Delete(dropPath & "\-new", True)
             File.Move(dropPath & "\-new.vpk", dropPath & "\pak01_dir.vpk")
         End If
     End Sub
@@ -33,7 +34,7 @@ Module Converter
         If (outdir.Replace(dropPath, "").Contains("ignore")) Then
             Return
         End If
-        outdir = outdire(path)
+        outdir = outdir(path)
 
         Directory.CreateDirectory(outdir)
 
@@ -46,6 +47,7 @@ Module Converter
                 'see example.
 
                 'we check if this is for an animated texture
+
                 If (ImageExists(path.Substring(0, path.LastIndexOf(".")) & "000")) Then
                     'it is for an animated texture, convert it to vtf using vtex
 
@@ -62,7 +64,6 @@ Module Converter
                             ro.WaitForExit()
                         Next
                     End If
-
                     Dim psi = New ProcessStartInfo With {
                         .FileName = CurDir() & "\vtex",
                         .WindowStyle = ProcessWindowStyle.Hidden,
@@ -70,24 +71,24 @@ Module Converter
                     } 'vtex
                     Dim pro = Process.Start(psi)
                     pro.WaitForExit()
-
                     If convert Then
                         'delete converted tgas
                         For Each f In Directory.GetFiles(path.Substring(0, path.LastIndexOf("\")), path.Substring(0, path.LastIndexOf(".")).Substring(path.LastIndexOf("\") + 1) & "*.tga", SearchOption.TopDirectoryOnly)
                             File.Delete(f)
                         Next
                     End If
-
                 Else
-                        'it's some other txt
-                    End If
+                    'it's some other txt, do nothing
+                End If
+
             Case ".bmp", ".jpg", ".png", ".tga"
 
                 'It's a texture to be converted to vtf
 
                 'we check if it is part of an animated texture by checking if a txt named the same as texture without ### exists
+
                 If (File.Exists(path.Substring(0, path.Length - 7) & ".txt")) Then
-                    'it is part of an animated texture, don't do anything
+                    'it is part of an animated texture, do nothing
                 Else
                     'it is not part of an animated texture, we're good to convert
                     Dim psi = New ProcessStartInfo With {
@@ -107,18 +108,17 @@ Module Converter
                 End Try
         End Select
     End Sub
-    Public Function outdire(path As String)
-        Dim outdir = path.Substring(0, path.LastIndexOf("\"))
-        If outdir.Equals(dropPath) Then
-        Else
-            Dim nextDir = outdir.Replace(dropPath, "").Substring(0, outdir.Replace(dropPath & "\", "").IndexOf("\") + 1)
+    Public Function Outdir(path As String)
+        Dim e = path.Substring(0, path.LastIndexOf("\"))
+        If Not e.Equals(dropPath) Then
             If (options.fileMode = 0) Then
-                outdir = outdir.Replace(dropPath & nextDir, dropPath & "\-new")
+                Dim n = e.Replace(dropPath, "").Substring(0, e.Replace(dropPath & "\", "").IndexOf("\") + 1)
+                e = e.Replace(dropPath & n, dropPath & "\-new")
             Else
-                outdir = outdir.Replace(dropPath, dropPath & "\-new")
+                e = e.Replace(dropPath, dropPath & "\-new")
             End If
         End If
-        Return outdir
+        Return e
     End Function
 
     Public Function ImageExists(path As String)
