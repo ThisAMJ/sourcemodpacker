@@ -3,18 +3,24 @@
 Module Converter
     Public Sub Pack(files As List(Of String))
         FrmMain.pbConversion.Minimum = 0
-        FrmMain.pbConversion.Maximum = files.Count
+        FrmMain.pbConversion.Maximum = files.Count + 1
         FrmMain.pbConversion.Value = 0
-        Directory.Delete(dropPath & "\-new", True)
+        If Directory.Exists(dropPath & "\-new") Then
+            Directory.Delete(dropPath & "\-new", True)
+        End If
         Directory.CreateDirectory(dropPath & "\-new")
         For Each file In files
             FrmMain.pbConversion.Value += 1
             VTFify(file)
         Next
-        FrmMain.pbConversion.Value = 0
+
         If (options.pack) Then
-            File.Delete(dropPath & "\-new.vpk")
-            File.Delete(dropPath & "\pak01_dir.vpk")
+            If File.Exists(dropPath & "\-new.vpk") Then
+                File.Delete(dropPath & "\-new.vpk")
+            End If
+            If File.Exists(dropPath & "\pak01_dir.vpk") Then
+                File.Delete(dropPath & "\pak01_dir.vpk")
+            End If
             Dim psi = New ProcessStartInfo With {
                 .FileName = CurDir() & "\vpk",
                 .WindowStyle = ProcessWindowStyle.Hidden,
@@ -22,9 +28,14 @@ Module Converter
             }
             Dim pro = Process.Start(psi)
             pro.WaitForExit()
-            Directory.Delete(dropPath & "\-new", True)
+            If Directory.Exists(dropPath & "\-new") Then
+                Directory.Delete(dropPath & "\-new", True)
+            End If
             File.Move(dropPath & "\-new.vpk", dropPath & "\pak01_dir.vpk")
         End If
+
+        FrmMain.pbConversion.Value = 0
+        FrmMain.lblFolder.Text = "Done!"
     End Sub
 
 
@@ -34,7 +45,7 @@ Module Converter
         If (outdir.Replace(dropPath, "").Contains("ignore")) Then
             Return
         End If
-        outdir = outdir(path)
+        outdir = GetDir(path)
 
         Directory.CreateDirectory(outdir)
 
@@ -46,24 +57,24 @@ Module Converter
                 'startindex and endindex (eg 0 and 1)
                 'see example.
 
-                'we check if this is for an animated texture
+                'we check if this is for an animated texture by seeing if an image with filename000 exists
 
-                If (ImageExists(path.Substring(0, path.LastIndexOf(".")) & "000")) Then
-                    'it is for an animated texture, convert it to vtf using vtex
-
-                    Dim convert = Not (File.Exists(path.Substring(0, path.LastIndexOf(".")) & "000.tga"))
+                If ImageExists(path.Replace(".txt", "") & "000") Then
+                    'it's for an animated texture, convert it to vtf using vtex
+                    Dim convert = Not File.Exists(path.Substring(0, path.LastIndexOf(".")) & "000.tga")
                     If convert Then
-                        'vtex can only handle targa, we convert other formats using ffmpeg
                         For Each f In Directory.GetFiles(path.Substring(0, path.LastIndexOf("\")), path.Substring(0, path.LastIndexOf(".")).Substring(path.LastIndexOf("\") + 1) & "*", SearchOption.TopDirectoryOnly)
-                            Dim si = New ProcessStartInfo With {
-                                .FileName = CurDir() & "\ffmpeg",
-                                .WindowStyle = ProcessWindowStyle.Hidden,
-                                .Arguments = "-i " & Escape(f) & " " & Escape(f.Substring(0, f.LastIndexOf(".")) & ".tga")
-                            }
-                            Dim ro = Process.Start(si)
-                            ro.WaitForExit()
+                            If Not f.Substring(f.LastIndexOf(".")).Equals(".txt") Then
+                                Dim si = New ProcessStartInfo With {
+                                    .FileName = CurDir() & "\ffmpeg",
+                                    .WindowStyle = ProcessWindowStyle.Hidden,
+                                    .Arguments = "-i " & Escape(f) & " " & Escape(f.Substring(0, f.LastIndexOf(".")) & ".tga")
+                                }
+                                Dim ro = Process.Start(si)
+                                ro.WaitForExit()
+                            End If
                         Next
-                    End If
+                    End If 'vtex can only handle targa, we convert other formats using ffmpeg
                     Dim psi = New ProcessStartInfo With {
                         .FileName = CurDir() & "\vtex",
                         .WindowStyle = ProcessWindowStyle.Hidden,
@@ -76,9 +87,7 @@ Module Converter
                         For Each f In Directory.GetFiles(path.Substring(0, path.LastIndexOf("\")), path.Substring(0, path.LastIndexOf(".")).Substring(path.LastIndexOf("\") + 1) & "*.tga", SearchOption.TopDirectoryOnly)
                             File.Delete(f)
                         Next
-                    End If
-                Else
-                    'it's some other txt, do nothing
+                    End If 'delete converted tgas after
                 End If
 
             Case ".bmp", ".jpg", ".png", ".tga"
@@ -100,15 +109,11 @@ Module Converter
                     pro.WaitForExit()
                 End If
             Case Else
-                'it's some other file
-                Try
-                    File.Copy(path, outdir & path.Substring(path.LastIndexOf("\")))
-                Catch e As Exception
-
-                End Try
+                'it's some other file, copy it over
+                File.Copy(path, outdir & path.Substring(path.LastIndexOf("\")))
         End Select
     End Sub
-    Public Function Outdir(path As String)
+    Public Function GetDir(path As String)
         Dim e = path.Substring(0, path.LastIndexOf("\"))
         If Not e.Equals(dropPath) Then
             If (options.fileMode = 0) Then
