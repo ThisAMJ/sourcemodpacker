@@ -23,7 +23,6 @@ Partial Class FrmMain
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.pbConversion = New System.Windows.Forms.ProgressBar()
-        Me.GroupBox1 = New System.Windows.Forms.GroupBox()
         Me.lblFolder = New System.Windows.Forms.Label()
         Me.SuspendLayout()
         '
@@ -33,16 +32,6 @@ Partial Class FrmMain
         Me.pbConversion.Name = "pbConversion"
         Me.pbConversion.Size = New System.Drawing.Size(256, 23)
         Me.pbConversion.TabIndex = 0
-        '
-        'GroupBox1
-        '
-        Me.GroupBox1.Font = New System.Drawing.Font("Microsoft Sans Serif", 23.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.GroupBox1.Location = New System.Drawing.Point(12, 12)
-        Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Size = New System.Drawing.Size(389, 343)
-        Me.GroupBox1.TabIndex = 2
-        Me.GroupBox1.TabStop = False
-        Me.GroupBox1.Text = "Settings"
         '
         'lblFolder
         '
@@ -62,7 +51,6 @@ Partial Class FrmMain
         Me.BackColor = System.Drawing.Color.White
         Me.ClientSize = New System.Drawing.Size(800, 450)
         Me.Controls.Add(Me.lblFolder)
-        Me.Controls.Add(Me.GroupBox1)
         Me.Controls.Add(Me.pbConversion)
         Me.ForeColor = System.Drawing.Color.Black
         Me.Name = "FrmMain"
@@ -73,6 +61,5 @@ Partial Class FrmMain
     End Sub
 
     Friend WithEvents pbConversion As ProgressBar
-    Friend WithEvents GroupBox1 As GroupBox
     Friend WithEvents lblFolder As Label
 End Class

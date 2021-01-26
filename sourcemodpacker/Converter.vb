@@ -5,6 +5,12 @@ Module Converter
         FrmMain.pbConversion.Minimum = 0
         FrmMain.pbConversion.Maximum = files.Count + 1
         FrmMain.pbConversion.Value = 0
+        If File.Exists(dropPath & "\-new.vpk") Then
+            File.Delete(dropPath & "\-new.vpk")
+        End If
+        If File.Exists(dropPath & "\pak01_dir.vpk") Then
+            File.Delete(dropPath & "\pak01_dir.vpk")
+        End If
         If Directory.Exists(dropPath & "\-new") Then
             Directory.Delete(dropPath & "\-new", True)
         End If
@@ -15,12 +21,6 @@ Module Converter
         Next
 
         If (options.pack) Then
-            If File.Exists(dropPath & "\-new.vpk") Then
-                File.Delete(dropPath & "\-new.vpk")
-            End If
-            If File.Exists(dropPath & "\pak01_dir.vpk") Then
-                File.Delete(dropPath & "\pak01_dir.vpk")
-            End If
             Dim psi = New ProcessStartInfo With {
                 .FileName = CurDir() & "\vpk",
                 .WindowStyle = ProcessWindowStyle.Hidden,

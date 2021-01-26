@@ -3,19 +3,19 @@
 Public Class FrmMain
     Private Sub FrmMain_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         AllowDrop = True
-        'Process.Start("C:\path\to\program.exe", "arg", "arg", "arg", "etc")
     End Sub
 
     Public Sub FileEnter(sender As Object, e As DragEventArgs) Handles Me.DragEnter
-        If e.Data.GetDataPresent(DataFormats.FileDrop) Then e.Effect = DragDropEffects.Copy
+        e.Effect = If(e.Data.GetDataPresent(DataFormats.FileDrop), DragDropEffects.Copy, DragDropEffects.None)
         lblFolder.Text = CType(e.Data.GetData(DataFormats.FileDrop), String()).First
     End Sub
 
     Public Sub FileDrop(sender As Object, e As DragEventArgs) Handles Me.DragDrop
+        AllowDrop = False
         dropPath = CType(e.Data.GetData(DataFormats.FileDrop), String()).First
         Dim files = GetFiles(dropPath)
-        e.Effect = DragDropEffects.None
         Pack(files)
+        AllowDrop = True
     End Sub
 
     Public Sub DropCancel() Handles Me.DragLeave
