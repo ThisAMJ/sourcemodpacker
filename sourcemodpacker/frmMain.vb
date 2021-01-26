@@ -24,7 +24,7 @@ Public Class FrmMain
 End Class
 
 Module code
-    Public options As New Settings(0, True)
+    Public options As Settings
 
     Public dropPath As String
 

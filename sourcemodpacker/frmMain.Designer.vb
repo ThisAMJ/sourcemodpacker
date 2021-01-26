@@ -24,6 +24,8 @@ Partial Class FrmMain
     Private Sub InitializeComponent()
         Me.pbConversion = New System.Windows.Forms.ProgressBar()
         Me.lblFolder = New System.Windows.Forms.Label()
+        Me.lblSettings = New System.Windows.Forms.Label()
+        Me.CheckBox1 = New System.Windows.Forms.CheckBox()
         Me.SuspendLayout()
         '
         'pbConversion
@@ -43,6 +45,26 @@ Partial Class FrmMain
         Me.lblFolder.TabIndex = 3
         Me.lblFolder.Text = "Drop a folder here!"
         '
+        'lblSettings
+        '
+        Me.lblSettings.AutoSize = True
+        Me.lblSettings.Font = New System.Drawing.Font("Microsoft Sans Serif", 16.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblSettings.Location = New System.Drawing.Point(13, 13)
+        Me.lblSettings.Name = "lblSettings"
+        Me.lblSettings.Size = New System.Drawing.Size(91, 26)
+        Me.lblSettings.TabIndex = 4
+        Me.lblSettings.Text = "Settings"
+        '
+        'CheckBox1
+        '
+        Me.CheckBox1.AutoSize = True
+        Me.CheckBox1.Location = New System.Drawing.Point(12, 55)
+        Me.CheckBox1.Name = "CheckBox1"
+        Me.CheckBox1.Size = New System.Drawing.Size(81, 17)
+        Me.CheckBox1.TabIndex = 5
+        Me.CheckBox1.Text = "CheckBox1"
+        Me.CheckBox1.UseVisualStyleBackColor = True
+        '
         'FrmMain
         '
         Me.AllowDrop = True
@@ -50,6 +72,8 @@ Partial Class FrmMain
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.White
         Me.ClientSize = New System.Drawing.Size(800, 450)
+        Me.Controls.Add(Me.CheckBox1)
+        Me.Controls.Add(Me.lblSettings)
         Me.Controls.Add(Me.lblFolder)
         Me.Controls.Add(Me.pbConversion)
         Me.ForeColor = System.Drawing.Color.Black
@@ -62,4 +86,6 @@ Partial Class FrmMain
 
     Friend WithEvents pbConversion As ProgressBar
     Friend WithEvents lblFolder As Label
+    Friend WithEvents lblSettings As Label
+    Friend WithEvents CheckBox1 As CheckBox
 End Class

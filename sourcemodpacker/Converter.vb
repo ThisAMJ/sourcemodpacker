@@ -41,11 +41,8 @@ Module Converter
 
 
     Public Sub VTFify(path As String)
-        Dim outdir = path.Substring(0, path.LastIndexOf("\"))
-        If (outdir.Replace(dropPath, "").Contains("ignore")) Then
-            Return
-        End If
-        outdir = GetDir(path)
+        If (path.Replace(dropPath, "").Contains("ignore")) Then Return
+        Dim outdir = GetDir(path)
 
         Directory.CreateDirectory(outdir)
 
@@ -140,11 +137,6 @@ End Module
 
 
 Class Settings
-    Public fileMode As Integer
-    Public pack As Boolean
-
-    Public Sub New(fileMode As Integer, pack As Boolean)
-        Me.fileMode = fileMode
-        Me.pack = pack
-    End Sub
+    Public fileMode As Integer = 0
+    Public pack As Boolean = True
 End Class
