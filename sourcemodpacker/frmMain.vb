@@ -13,8 +13,8 @@ Public Class FrmMain
     Public Sub FileDrop(sender As Object, e As DragEventArgs) Handles Me.DragDrop
         AllowDrop = False
         dropPath = CType(e.Data.GetData(DataFormats.FileDrop), String()).First
-        Dim files = GetFiles(dropPath)
-        Pack(files)
+        dropType = File.Exists(dropPath)
+        Pack(dropPath)
         AllowDrop = True
     End Sub
 
@@ -24,9 +24,9 @@ Public Class FrmMain
 End Class
 
 Module code
-    Public options As Settings
-
+    Public options As New Settings
     Public dropPath As String
+    Public dropType As Boolean
 
     Public Function GetFiles(path As String)
         Dim files = New List(Of String)

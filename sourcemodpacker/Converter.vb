@@ -1,10 +1,7 @@
 ﻿Imports System.IO
 
 Module Converter
-    Public Sub Pack(files As List(Of String))
-        FrmMain.pbConversion.Minimum = 0
-        FrmMain.pbConversion.Maximum = files.Count + 1
-        FrmMain.pbConversion.Value = 0
+    Public Sub Pack(path As String)
         If File.Exists(dropPath & "\-new.vpk") Then
             File.Delete(dropPath & "\-new.vpk")
         End If
@@ -14,11 +11,17 @@ Module Converter
         If Directory.Exists(dropPath & "\-new") Then
             Directory.Delete(dropPath & "\-new", True)
         End If
+        Dim files = GetFiles(path)
+        FrmMain.pbConversion.Minimum = 0
+        FrmMain.pbConversion.Maximum = files.Count + 1
+        FrmMain.pbConversion.Value = 0
         Directory.CreateDirectory(dropPath & "\-new")
         For Each file In files
+            Console.WriteLine(file)
             FrmMain.pbConversion.Value += 1
             VTFify(file)
         Next
+        Console.WriteLine("done")
 
         If (options.pack) Then
             Dim psi = New ProcessStartInfo With {
@@ -34,28 +37,21 @@ Module Converter
             File.Move(dropPath & "\-new.vpk", dropPath & "\pak01_dir.vpk")
         End If
 
+        Console.WriteLine("fully done")
+
         FrmMain.pbConversion.Value = 0
         FrmMain.lblFolder.Text = "Done!"
     End Sub
 
-
-
     Public Sub VTFify(path As String)
         If (path.Replace(dropPath, "").Contains("ignore")) Then Return
         Dim outdir = GetDir(path)
-
         Directory.CreateDirectory(outdir)
-
-        Select Case (path.Substring(path.LastIndexOf(".")))
+        Select Case path.Substring(path.LastIndexOf("."))
             Case ".txt"
-
                 'Animated textures are formatted like foobar000.tga foobar001.tga
-                'And referenced using a text file like foobar.txt containing
-                'startindex and endindex (eg 0 and 1)
-                'see example.
-
+                'And referenced using a text file like foobar.txt containing startindex and endindex (eg 0 and 1)
                 'we check if this is for an animated texture by seeing if an image with filename000 exists
-
                 If ImageExists(path.Replace(".txt", "") & "000") Then
                     'it's for an animated texture, convert it to vtf using vtex
                     Dim convert = Not File.Exists(path.Substring(0, path.LastIndexOf(".")) & "000.tga")
@@ -86,16 +82,10 @@ Module Converter
                         Next
                     End If 'delete converted tgas after
                 End If
-
             Case ".bmp", ".jpg", ".png", ".tga"
-
                 'It's a texture to be converted to vtf
-
                 'we check if it is part of an animated texture by checking if a txt named the same as texture without ### exists
-
-                If (File.Exists(path.Substring(0, path.Length - 7) & ".txt")) Then
-                    'it is part of an animated texture, do nothing
-                Else
+                If Not File.Exists(path.Substring(0, path.Length - 7) & ".txt") Then
                     'it is not part of an animated texture, we're good to convert
                     Dim psi = New ProcessStartInfo With {
                         .FileName = CurDir() & "\vtfcmd",
@@ -110,10 +100,16 @@ Module Converter
                 File.Copy(path, outdir & path.Substring(path.LastIndexOf("\")))
         End Select
     End Sub
+
     Public Function GetDir(path As String)
         Dim e = path.Substring(0, path.LastIndexOf("\"))
+        'Console.WriteLine(e.Replace(dropPath, ""))
         If Not e.Equals(dropPath) Then
-            If (options.fileMode = 0) Then
+
+
+
+
+            If options.fileMode = 0 Then
                 Dim n = e.Replace(dropPath, "").Substring(0, e.Replace(dropPath & "\", "").IndexOf("\") + 1)
                 e = e.Replace(dropPath & n, dropPath & "\-new")
             Else
@@ -134,7 +130,6 @@ Module Converter
         Return """" & path & """"
     End Function
 End Module
-
 
 Class Settings
     Public fileMode As Integer = 0
