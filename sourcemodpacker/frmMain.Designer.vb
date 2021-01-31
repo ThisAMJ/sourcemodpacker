@@ -54,9 +54,9 @@ Partial Class FrmMain
         Me.CheckBox1.AutoSize = True
         Me.CheckBox1.Location = New System.Drawing.Point(18, 55)
         Me.CheckBox1.Name = "CheckBox1"
-        Me.CheckBox1.Size = New System.Drawing.Size(81, 17)
+        Me.CheckBox1.Size = New System.Drawing.Size(82, 17)
         Me.CheckBox1.TabIndex = 5
-        Me.CheckBox1.Text = "CheckBox1"
+        Me.CheckBox1.Text = "Placeholder"
         Me.CheckBox1.UseVisualStyleBackColor = True
         '
         'txtFromPath
