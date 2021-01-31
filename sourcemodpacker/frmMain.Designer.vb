@@ -24,7 +24,7 @@ Partial Class FrmMain
     Private Sub InitializeComponent()
         Me.pbConversion = New System.Windows.Forms.ProgressBar()
         Me.lblSettings = New System.Windows.Forms.Label()
-        Me.CheckBox1 = New System.Windows.Forms.CheckBox()
+        Me.cbPlaceholder = New System.Windows.Forms.CheckBox()
         Me.txtFromPath = New System.Windows.Forms.TextBox()
         Me.txtToPath = New System.Windows.Forms.TextBox()
         Me.lblToPath = New System.Windows.Forms.Label()
@@ -49,15 +49,15 @@ Partial Class FrmMain
         Me.lblSettings.TabIndex = 4
         Me.lblSettings.Text = "Settings"
         '
-        'CheckBox1
+        'cbPlaceholder
         '
-        Me.CheckBox1.AutoSize = True
-        Me.CheckBox1.Location = New System.Drawing.Point(18, 55)
-        Me.CheckBox1.Name = "CheckBox1"
-        Me.CheckBox1.Size = New System.Drawing.Size(82, 17)
-        Me.CheckBox1.TabIndex = 5
-        Me.CheckBox1.Text = "Placeholder"
-        Me.CheckBox1.UseVisualStyleBackColor = True
+        Me.cbPlaceholder.AutoSize = True
+        Me.cbPlaceholder.Location = New System.Drawing.Point(18, 55)
+        Me.cbPlaceholder.Name = "cbPlaceholder"
+        Me.cbPlaceholder.Size = New System.Drawing.Size(82, 17)
+        Me.cbPlaceholder.TabIndex = 5
+        Me.cbPlaceholder.Text = "Placeholder"
+        Me.cbPlaceholder.UseVisualStyleBackColor = True
         '
         'txtFromPath
         '
@@ -113,7 +113,7 @@ Partial Class FrmMain
         Me.Controls.Add(Me.lblToPath)
         Me.Controls.Add(Me.txtToPath)
         Me.Controls.Add(Me.txtFromPath)
-        Me.Controls.Add(Me.CheckBox1)
+        Me.Controls.Add(Me.cbPlaceholder)
         Me.Controls.Add(Me.lblSettings)
         Me.Controls.Add(Me.pbConversion)
         Me.ForeColor = System.Drawing.Color.Black
@@ -126,7 +126,7 @@ Partial Class FrmMain
 
     Friend WithEvents pbConversion As ProgressBar
     Friend WithEvents lblSettings As Label
-    Friend WithEvents CheckBox1 As CheckBox
+    Friend WithEvents cbPlaceholder As CheckBox
     Friend WithEvents txtFromPath As TextBox
     Friend WithEvents txtToPath As TextBox
     Friend WithEvents lblToPath As Label
