@@ -23,27 +23,21 @@ Partial Class FrmMain
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.pbConversion = New System.Windows.Forms.ProgressBar()
-        Me.lblFolder = New System.Windows.Forms.Label()
         Me.lblSettings = New System.Windows.Forms.Label()
         Me.CheckBox1 = New System.Windows.Forms.CheckBox()
+        Me.txtFromPath = New System.Windows.Forms.TextBox()
+        Me.txtToPath = New System.Windows.Forms.TextBox()
+        Me.lblToPath = New System.Windows.Forms.Label()
+        Me.lblFromPath = New System.Windows.Forms.Label()
+        Me.btnConvert = New System.Windows.Forms.Button()
         Me.SuspendLayout()
         '
         'pbConversion
         '
-        Me.pbConversion.Location = New System.Drawing.Point(12, 415)
+        Me.pbConversion.Location = New System.Drawing.Point(12, 265)
         Me.pbConversion.Name = "pbConversion"
-        Me.pbConversion.Size = New System.Drawing.Size(256, 23)
+        Me.pbConversion.Size = New System.Drawing.Size(216, 23)
         Me.pbConversion.TabIndex = 0
-        '
-        'lblFolder
-        '
-        Me.lblFolder.AutoSize = True
-        Me.lblFolder.ForeColor = System.Drawing.Color.Black
-        Me.lblFolder.Location = New System.Drawing.Point(9, 399)
-        Me.lblFolder.Name = "lblFolder"
-        Me.lblFolder.Size = New System.Drawing.Size(95, 13)
-        Me.lblFolder.TabIndex = 3
-        Me.lblFolder.Text = "Drop a folder here!"
         '
         'lblSettings
         '
@@ -58,12 +52,54 @@ Partial Class FrmMain
         'CheckBox1
         '
         Me.CheckBox1.AutoSize = True
-        Me.CheckBox1.Location = New System.Drawing.Point(12, 55)
+        Me.CheckBox1.Location = New System.Drawing.Point(18, 55)
         Me.CheckBox1.Name = "CheckBox1"
         Me.CheckBox1.Size = New System.Drawing.Size(81, 17)
         Me.CheckBox1.TabIndex = 5
         Me.CheckBox1.Text = "CheckBox1"
         Me.CheckBox1.UseVisualStyleBackColor = True
+        '
+        'txtFromPath
+        '
+        Me.txtFromPath.Location = New System.Drawing.Point(12, 200)
+        Me.txtFromPath.Name = "txtFromPath"
+        Me.txtFromPath.Size = New System.Drawing.Size(216, 20)
+        Me.txtFromPath.TabIndex = 6
+        '
+        'txtToPath
+        '
+        Me.txtToPath.Location = New System.Drawing.Point(12, 239)
+        Me.txtToPath.Name = "txtToPath"
+        Me.txtToPath.Size = New System.Drawing.Size(216, 20)
+        Me.txtToPath.TabIndex = 7
+        '
+        'lblToPath
+        '
+        Me.lblToPath.AutoSize = True
+        Me.lblToPath.Location = New System.Drawing.Point(9, 223)
+        Me.lblToPath.Name = "lblToPath"
+        Me.lblToPath.Size = New System.Drawing.Size(20, 13)
+        Me.lblToPath.TabIndex = 8
+        Me.lblToPath.Text = "To"
+        '
+        'lblFromPath
+        '
+        Me.lblFromPath.AutoSize = True
+        Me.lblFromPath.Location = New System.Drawing.Point(9, 184)
+        Me.lblFromPath.Name = "lblFromPath"
+        Me.lblFromPath.Size = New System.Drawing.Size(30, 13)
+        Me.lblFromPath.TabIndex = 9
+        Me.lblFromPath.Text = "From"
+        '
+        'btnConvert
+        '
+        Me.btnConvert.Font = New System.Drawing.Font("Microsoft Sans Serif", 15.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnConvert.Location = New System.Drawing.Point(12, 294)
+        Me.btnConvert.Name = "btnConvert"
+        Me.btnConvert.Size = New System.Drawing.Size(216, 39)
+        Me.btnConvert.TabIndex = 10
+        Me.btnConvert.Text = "Convert"
+        Me.btnConvert.UseVisualStyleBackColor = True
         '
         'FrmMain
         '
@@ -71,21 +107,29 @@ Partial Class FrmMain
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.White
-        Me.ClientSize = New System.Drawing.Size(800, 450)
+        Me.ClientSize = New System.Drawing.Size(240, 345)
+        Me.Controls.Add(Me.btnConvert)
+        Me.Controls.Add(Me.lblFromPath)
+        Me.Controls.Add(Me.lblToPath)
+        Me.Controls.Add(Me.txtToPath)
+        Me.Controls.Add(Me.txtFromPath)
         Me.Controls.Add(Me.CheckBox1)
         Me.Controls.Add(Me.lblSettings)
-        Me.Controls.Add(Me.lblFolder)
         Me.Controls.Add(Me.pbConversion)
         Me.ForeColor = System.Drawing.Color.Black
         Me.Name = "FrmMain"
-        Me.Text = "Source Mod Packer"
+        Me.Text = "SMP"
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
     End Sub
 
     Friend WithEvents pbConversion As ProgressBar
-    Friend WithEvents lblFolder As Label
     Friend WithEvents lblSettings As Label
     Friend WithEvents CheckBox1 As CheckBox
+    Friend WithEvents txtFromPath As TextBox
+    Friend WithEvents txtToPath As TextBox
+    Friend WithEvents lblToPath As Label
+    Friend WithEvents lblFromPath As Label
+    Friend WithEvents btnConvert As Button
 End Class

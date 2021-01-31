@@ -3,26 +3,26 @@
 Module Converter
     Public Sub Pack(path As String)
         If (dropType) Then
-            VTFify(path)
-            FrmMain.lblFolder.Text = "Done!"
+            Convert(path)
         Else
+            Dim toPath = FrmMain.txtToPath.Text
+            If File.Exists(toPath) Then
+                File.Delete(toPath)
+            End If
             If File.Exists(dropPath & "\-new.vpk") Then
                 File.Delete(dropPath & "\-new.vpk")
-            End If
-            If File.Exists(dropPath & "\pak01_dir.vpk") Then
-                File.Delete(dropPath & "\pak01_dir.vpk")
             End If
             If Directory.Exists(dropPath & "\-new") Then
                 Directory.Delete(dropPath & "\-new", True)
             End If
+            Directory.CreateDirectory(dropPath & "\-new")
             Dim files = GetFiles(path)
             FrmMain.pbConversion.Minimum = 0
             FrmMain.pbConversion.Maximum = files.Count + 1
             FrmMain.pbConversion.Value = 0
-            Directory.CreateDirectory(dropPath & "\-new")
             For Each file In files
                 FrmMain.pbConversion.Value += 1
-                VTFify(file)
+                Convert(file)
             Next
             If (options.pack) Then
                 Dim psi = New ProcessStartInfo With {
@@ -35,15 +35,15 @@ Module Converter
                 If Directory.Exists(dropPath & "\-new") Then
                     Directory.Delete(dropPath & "\-new", True)
                 End If
-                File.Move(dropPath & "\-new.vpk", dropPath & "\pak01_dir.vpk")
+                Directory.CreateDirectory(toPath.Substring(0, toPath.LastIndexOf("\")))
+                File.Move(dropPath & "\-new.vpk", toPath)
             End If
-            FrmMain.pbConversion.Value = 0
-            FrmMain.lblFolder.Text = "Done!"
+            FrmMain.pbConversion.Value = FrmMain.pbConversion.Maximum
         End If
 
     End Sub
 
-    Public Sub VTFify(path As String)
+    Public Sub Convert(path As String)
         Dim pathDir = path.Substring(0, path.LastIndexOf("\"))
         Dim fileExt = path.Substring(path.LastIndexOf("."))
         Dim fileName = path.Substring(pathDir.Length + 1, path.Length - (pathDir.Length + fileExt.Length + 1))
@@ -101,7 +101,7 @@ Module Converter
                     'if it was the only file dragged then convert the whole texture
                     'otherwise the txt will be converted later (or already has been)
                     If dropType Then
-                        VTFify(path.Substring(0, path.Length - 7) & ".txt")
+                        Convert(path.Substring(0, path.Length - 7) & ".txt")
                     End If
                 Else
                     'it is not part of an animated texture, we're good to convert
@@ -117,7 +117,7 @@ Module Converter
                 'it's some other file, copy it over
                 'but only if it WASN'T the only file dragged
                 If Not dropType Then
-                    File.Copy(path, outdir & fileName & fileExt)
+                    File.Copy(path, outdir & "\" & fileName & fileExt)
                 End If
         End Select
     End Sub

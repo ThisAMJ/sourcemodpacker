@@ -2,39 +2,50 @@
 
 Public Class FrmMain
     Private Sub FrmMain_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        AllowDrop = True
+        Dim l = Nothing
+        For Each letter In "ABCDEFGHIJKLMNOPQRSTUVWXYZ".ToCharArray
+            If Directory.Exists(letter & ":\Program Files (x86)\Steam\steamapps\common") Then
+                l = letter & ":\Program Files (x86)\Steam\steamapps\common"
+                Exit For
+            End If
+        Next
+        If l IsNot Nothing Then
+            steamDir = l
+        End If
+        Console.WriteLine(steamDir)
     End Sub
 
-    Public Sub FileEnter(sender As Object, e As DragEventArgs) Handles Me.DragEnter
-        e.Effect = If(e.Data.GetDataPresent(DataFormats.FileDrop), DragDropEffects.Copy, DragDropEffects.None)
-        lblFolder.Text = CType(e.Data.GetData(DataFormats.FileDrop), String()).First
+    Private Sub FileEnter(sender As Object, e As DragEventArgs) Handles Me.DragEnter
+        If (e.Data.GetDataPresent(DataFormats.FileDrop)) Then
+            dropPath = CType(e.Data.GetData(DataFormats.FileDrop), String()).First
+            txtFromPath.Text = dropPath
+            If dropType Then
+                txtToPath.Text = dropPath.Replace(".bmp", ".vtf").Replace(".jpg", ".vtf").Replace(".png", ".vtf").Replace(".tga", ".vtf") 'im lazy
+            Else
+                txtToPath.Text = dropPath & "\pak01_dir.vpk"
+            End If
+            dropType = File.Exists(dropPath)
+        End If
     End Sub
 
-    Public Sub FileDrop(sender As Object, e As DragEventArgs) Handles Me.DragDrop
-        AllowDrop = False
-        dropPath = CType(e.Data.GetData(DataFormats.FileDrop), String()).First
-        dropType = File.Exists(dropPath)
+    Private Sub ConvertClick(sender As Object, e As EventArgs) Handles btnConvert.Click
         Pack(dropPath)
-        AllowDrop = True
-    End Sub
-
-    Public Sub DropCancel() Handles Me.DragLeave
-        lblFolder.Text = "Drop a folder here!"
     End Sub
 End Class
 
 Module code
+    Public steamDir As String
     Public options As New Settings
     Public dropPath As String
     Public dropType As Boolean
 
-    Public Function GetFiles(path As String)
-        Dim files = New List(Of String)
-        If File.Exists(path) Then
-            files.Add(path)
-        ElseIf Directory.Exists(path) Then
-            files.AddRange(Directory.GetFiles(path, "*", SearchOption.AllDirectories))
+    Public Function GetFiles(p As String)
+        Dim f = New List(Of String)
+        If File.Exists(p) Then
+            f.Add(p)
+        ElseIf Directory.Exists(p) Then
+            f.AddRange(Directory.GetFiles(p, "*", SearchOption.AllDirectories))
         End If
-        Return files
+        Return f
     End Function
 End Module
