@@ -12,7 +12,6 @@ Public Class FrmMain
         If l IsNot Nothing Then
             steamDir = l
         End If
-        Console.WriteLine(steamDir)
     End Sub
 
     Private Sub FileEnter(sender As Object, e As DragEventArgs) Handles Me.DragEnter
